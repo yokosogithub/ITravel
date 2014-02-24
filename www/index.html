@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1">
+  <title>Itravel System Mobile</title>
+  <link href="css/jquery.mobile-1.3.2.min.css" rel="stylesheet" type="text/css"/>
+  <link href="css/my-styles.css" rel="stylesheet" type="text/css">
+  <script src="js/jquery-1.7.min.js" type="text/javascript"></script>
+  <script src="js/jquery.mobile-1.3.2.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+  <script type="text/javascript" src="js/jquery.ui.map.full.min.js"></script>
+  <script type="text/javascript" src="js/jquery.ui.map.extensions.js"></script>
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=00ff3b0d5343e0ed0e67af90dfa21a5c"></script>
+  <script>
+    $('#roadway').live("pageshow", function () {
+            $('#map_canvas_1').gmap('refresh');
+            $('#map_canvas_1').gmap('getCurrentPosition', function (position, status) {
+                if (status === 'OK') {
+                    var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+                    $('#map_canvas_1').gmap('get', 'map').panTo(latlng);
+                    $('#map_canvas_1').gmap('search', { 'location': latlng }, function (results, status) {
+                        if (status === 'OK') {
+                            $('#from').val(results[0].formatted_address);
+                        }
+                    });
+                } else {
+                    alert('Unable to get current position');
+                }
+            });
+        });
+
+        $('#roadway').live("pagecreate", function () {
+            $('#map_canvas_1').gmap({ 'center': '30.6666700000, 106.0666700001' });
+            $('#submit').click(function () {
+                $('#map_canvas_1').gmap('displayDirections', { 'origin': $('#from').val(), 'destination': $('#to').val(), 'travelMode': google.maps.DirectionsTravelMode.DRIVING }, { 'panel': document.getElementById('directions') }, function (response, status) {
+                    if (status === 'OK') {
+                        $('#results').show();
+                    } else {
+                        $('#results').hide();
+                    }
+                });
+                return false;
+            });
+        });
+
+        ////////////////////////////////////////////////////////////
+  </script>
+  <script src="js/dbManipulate.js"></script>
+</head> 
+<body>
+
+ <!--*******register and unlogin******-->
+<div data-role="page" id="unlogin" data-theme="d">
+     <div data-role="header"data-theme="b" id="logo">
+       <div data-role="navbar">
+           <ul> 
+              <li><a href="#unlogin">
+                  <img src="images/Itravel-logo.png" width="342" height="127" class="dropshadow"></a>
+               </li>
+          </ul>  
+       </div>     
+     </div>
+     
+     <div data-role="content" data-theme="d">
+      
+          <div data-role="fieldcontain" id="accountfield">
+            <label for="email">账号：</label>
+              <input type="email" id="email" name="email" class="required email" placeholder="邮箱地址" />
+          </div>
+            
+          <div data-role="fieldcontain" id="passfield">
+            <label for="password">密码：</label>
+            <input type="password" id="password" name="password" class="required" />
+          </div>
+
+          <div id="btnField">
+          	<div class="ui-body ui-body-b">
+            	<button class="btnRegister" data-theme="b" onclick="btnRegister();">注册</button>
+          	</div>
+
+          	<div class="ui-body ui-body-b">
+            	<button class="btnLogin" data-theme="a" onclick="btnLogin();">登录</button>
+          	</div>
+          </div>
+          
+     </div>
+</div>
+
+
+
+<!--***************show the info when you logined or registered successfully*************-->
+<div data-role="page" id="info">
+    <div data-theme="a" data-role="header">
+        <h3>提示</h3>
+    </div>
+    <div data-role="content">
+        <div data-role="fieldcontain" class="ui-grid-solo" style="text-align:center">
+            <h4>注册成功</h4>
+        </div>
+        <div class="ui-grid-solo">
+            <div class="ui-block-a">
+                <a href="#select" data-rel="dialog" data-transition="pop" data-theme="a"><input type="submit" data-theme="b" value="继续"></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--***************select your travel scenery********-->
+<div data-role="page" id="select">
+    <div data-theme="a" data-role="header">
+        <h3>选择景点</h3>
+    </div>
+    <div data-role="content">
+        <div data-role="fieldcontain" class="ui-grid-solo" style="text-align:center">
+            <input name="" id="searchinput1" placeholder="请输入景点名" value="" type="search"></div>
+        <div data-role="fieldcontain">
+            <label for="selectmenu1">省份：</label>
+            <select id="selectmenu1" name="" data-theme="e" onchange="selectChange()">
+                <option value="四川">四川</option>
+                <option value="北京">北京</option>
+            </select>
+        </div>
+        <div data-role="fieldcontain">
+            <label for="selectmenu2">景区名：</label>
+            <select id="selectmenu2" name="" data-theme="e">
+                <option value="峨眉山">峨眉山</option>
+                <option value="乐山">乐山</option>
+            </select>
+        </div>
+        <div class="ui-grid-solo">
+            <div class="ui-block-a">
+                <a href="#home" onclick="queryScenery();"><input type="submit" data-theme="b" value="确定"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/selectScenery.js"></script>
+
+
+
+<!--************** home page starts here ****************-->
+<div data-role="page" id="home" data-theme="e">
+
+  <!--************** home header start****************-->
+    <div data-role="header" data-theme="b" id="logo">
+        <div data-role="navbar">
+            <ul> 
+              <li><a href="#home">
+                  <img src="images/jqm-logo.png" width="290" height="135" class="dropshadow"></a>
+              </li>
+            </ul>      
+        </div>
+    </div>
+    <!--************** home header end****************-->
+    
+    
+    <!--************** home content area start****************-->
+  <div data-role="content" data-theme="d">     
+    <ul data-role="listview" class="thumbnails">
+         <li><a href="#tours"><img src="images/badges_8.gif" alt="Tours Listing" width="80" height="80">景点介绍<span class="ui-li-count">39</span></a></li>
+         <li><a href="#roadway" rel="external"><img src="images/badges_6.gif" width="80" height="80">规划路线</a></li>
+         <li><a href="#hotel" rel="external"><img src="images/badges_01.gif" alt="" width="80" height="80">附近酒店 <span class="ui-li-count">15</span></a></li>
+         <li><a href="Comment.html#comment" rel="external"><img src="images/badges_04.gif" width="80" height="80">近期评论<span class="ui-li-count">10</span></a></li>
+         <li><a href="#aboutus"><img src="images/badges_7.gif" alt="" width="80" height="80">关于我们</a></li>
+    </ul>   
+  </div>
+    <!--************** home content area end****************-->
+
+    
+    <!--************** home footer start****************-->
+  <div data-role="footer" data-theme="b" data-position="fixed">
+        <div data-role="navbar" data-theme="e" >
+              <ul> 
+                  <li><a href="#home" class="ui-btn-active" data-icon="home">主页</a></li>
+                  <li><a href="#tours" data-icon="grid">景点介绍</a></li>
+                  <li><a href="#hotel" data-icon="info">附近酒店</a></li> 
+                  <li><a href="comment.html#comment" data-icon="star" rel="external">近期评论</a></li>
+              </ul> 
+        </div>
+        <p class="copyright">&copy; 2013 ITravel System &nbsp;&nbsp;800-555-TOUR</p>
+  </div>
+    <!--************** home footer end****************--> 
+</div>
+<!--************** home page ends here ****************-->
+
+
+
+<!--************** tours page starts here ****************-->
+<div data-role="page" id="tours" data-theme="e">
+
+  <!--************** tours header start****************-->
+  <div data-role="header" data-theme="b">
+    <a href="#home" data-rel="back" data-icon="arrow-l">返回</a>
+        <h1>景点介绍</h1>
+    <a href="photogallery.html" rel="external">图片库</a>
+  </div>
+  <!--************** tours header end****************-->
+  <!--************** tours content area start****************-->
+  <div data-role="content" data-theme="d">  
+    <ul data-role="listview" data-dividertheme="e">
+            <li data-role="list-divider">五星级</li>
+              <li><a href="ScenicSpotDetail.html#scenicspot" rel="external">报国寺</a></li>
+              <li><a href="#jinding">金顶</a></li> 
+              <li><a href="#qingyinge">清音阁</a></li> 
+              <li><a href="#wanniansi">万年寺</a></li>                                
+              <li data-role="list-divider">四星级</li>       
+              <li><a href="#fuhusi">伏虎寺</a></li> 
+              <li><a href="#hongchunping">洪椿坪</a></li>        
+              <li><a href="#mayan">华藏寺</a></li>
+              <li><a href="#patagonia">雷洞坪</a></li>
+              <li><a href="#wineries">清音平湖</a></li>
+              <li><a href="#wineries">十方普贤圣像</a></li>
+              <li><a href="#wineries">双桥清音</a></li>
+              <li><a href="#wineries">万佛顶</a></li>
+              <li><a href="#wineries">洗象池</a></li>
+              <li><a href="#wineries">自然生态猴区</a></li>
+              <li data-role="list-divider">三星级</li>
+              <li><a href="#corals">纯阳殿</a></li>
+              <li><a href="#mauri">第一山亭</a></li>               
+              <li><a href="#oz">峨眉山博物馆</a></li>  
+              <li><a href="#sunsets">华严顶</a></li>
+              <li><a href="#mantas">九老洞</a></li>
+              <li><a href="#mantas">雷音寺</a></li>
+              <li><a href="#mantas">灵岩叠翠</a></li>
+              <li><a href="#mantas">萝峰晴云</a></li>
+              <li><a href="#mantas">牛心寺</a></li>
+              <li><a href="#mantas">善觉寺</a></li>
+              <li><a href="#mantas">圣积晚钟</a></li>
+              <li><a href="#mantas">圣水禅院</a></li>
+              <li><a href="#mantas">息心所</a></li>
+              <li><a href="#mantas">仙峰寺</a></li>
+              <li><a href="#mantas">一线天</a></li>
+              <li><a href="#mantas">中峰寺</a></li>
+              <li data-role="list-divider">二星级</li>          
+              <li><a href="#wall">“名山起点”牌坊</a></li>
+              <li><a href="#wall">白龙洞</a></li>
+              <li><a href="#wall">初殿</a></li>
+              <li><a href="#wall">广福寺</a></li>
+              <li><a href="#wall">接引殿</a></li>
+              <li><a href="#wall">摩崖石刻</a></li>
+              <li><a href="#wall">儒释道文化长廊</a></li>
+              <li><a href="#wall">遇仙寺</a></li>
+              <li data-role="list-divider">一星级</li>
+              <li><a href="#welcome_square">迎宾广场</a></li>          
+        </ul>
+  </div>
+  <!--************** tours content area end****************-->
+  <!--************** tours footer start****************-->
+  <div data-role="footer" data-theme="b" data-position="fixed">
+      <div data-role="navbar" data-theme="e" >
+            <ul> 
+                <li><a href="#home" class="ui-btn-active" data-icon="home">主页</a></li>
+                <li><a href="#tours" data-icon="grid">景点介绍</a></li>
+                <li><a href="#hotel" data-icon="info">附近酒店</a></li> 
+                <li><a href="comment.html#comment" data-icon="star" rel="external">近期评论</a></li>
+            </ul> 
+      </div>
+      <p class="copyright">&copy; 2013 ITravel System &nbsp;&nbsp;800-555-TOUR</p>
+    </div>
+  <!--************** tours footer end****************-->
+</div>
+<!--************** tours page ends here ****************-->
+
+
+
+
+<!--************** roadway page starts here ****************-->
+<div data-role="page" id="roadway" data-add-back-btn="true">
+
+  <!--************** roadway header start ****************-->
+  <div data-role="header" data-theme="b" >  
+      <h1>规划路线</h1>
+  </div>
+  <!--************** roadway header end ****************-->
+  <!--************** roadway content area start ****************-->
+  <div data-role="content" data-theme="d" style="text-align:center">
+          <div class="ui-bar-c ui-corner-all ui-shadow" style="padding: 1em;">
+                <div id="map_canvas_1" style="height: 300px;"></div>
+                <p>
+                    <label for="from">From</label>
+                    <input id="from" class="ui-bar-c" type="text" value="成都双流" />
+                </p>
+                <p>
+                    <label for="to">To</label>
+                    <input id="to" class="ui-bar-c" type="text" value="峨眉山" />
+                </p>
+                <a id="submit" href="#" data-role="button" data-icon="search">获取导航</a>
+          </div>
+          <div id="results" class="ui-listview ui-listview-inset ui-corner-all ui-shadow" style="display: none;">
+              <div class="ui-li ui-li-divider ui-btn ui-bar-b ui-corner-top ui-btn-up-undefined">结果</div>
+              <div id="directions"></div>
+              <div class="ui-li ui-li-divider ui-btn ui-bar-b ui-corner-bottom ui-btn-up-undefined"></div>
+          </div>
+  </div>
+  <!--************** roadway content area end ****************-->   
+  <!--************** roadway footer start ****************-->
+    <div data-role="footer" data-theme="b" data-position="fixed">
+      <div data-role="navbar" data-theme="e" >
+            <ul> 
+                <li><a href="#home" class="ui-btn-active" data-icon="home">主页</a></li>
+                <li><a href="#tours" data-icon="grid">景点介绍</a></li>
+                <li><a href="#hotel" data-icon="info">附近酒店</a></li> 
+                <li><a href="comment.html#comment" data-icon="star" rel="external">近期评论</a></li>
+            </ul> 
+      </div>
+        <p class="copyright">&copy; 2013 ITravel System &nbsp;&nbsp;800-555-TOUR</p>   
+    </div>
+    <!--************** roadway footer end ****************--> 
+<!--************** roadway page ends here ****************-->
+</div>
+
+
+
+<!--************** hotel page starts here ****************-->
+<div data-role="page" id="hotel" data-theme="e">
+
+  <!--************** hotel header start****************-->
+  <div data-role="header" data-theme="b" >      
+    <a href="#home" data-rel="back" data-icon="arrow-l">返回</a>
+    <h1>附近酒店</h1>
+  </div>
+  <!--************** hotel header end****************-->
+  <!--************** hotel content area start****************-->
+  <div data-role="content" data-theme="d" id="dituContent" style="height:500px">
+  </div>
+  <!--************** hotel content area end****************-->
+  <!--************** hotel footer start****************-->
+  <div data-role="footer" data-theme="b" data-position="fixed">
+      <div data-role="navbar" data-theme="e" >
+            <ul> 
+                <li><a href="#home" class="ui-btn-active" data-icon="home">主页</a></li>
+                <li><a href="#tours" data-icon="grid">景点介绍</a></li>
+                <li><a href="#hotel" data-icon="info">附近酒店</a></li> 
+                <li><a href="comment.html#comment" data-icon="star" rel="external">近期评论</a></li>
+            </ul> 
+      </div>
+        <p class="copyright">&copy; 2013 ITravel System &nbsp;&nbsp;800-555-TOUR</p>
+   </div>
+  <!--************** hotel footer end ****************--> 
+</div>
+<!--************** hotel page ends here ****************-->
+
+
+
+
+
+<!--************** about us page starts here ****************-->
+<div data-role="page" id="aboutus_unfinish" data-theme="e" data-add-back-btn="true">
+
+  <!--************** about us header start ****************-->
+  <div data-role="header" data-theme="b">
+      <a href="#home" data-rel="back" data-icon="arrow-l">Back</a>
+        <h1>About Us</h1>
+  </div>
+    <!--************** about us header end ****************-->
+    
+    <!--************** about us content area start ****************-->
+  <div data-role="navbar" data-theme="e" >
+         <ul> 
+             <li><a href="https://twitter.com/JqmTravel" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" target="_blank"><img src="images/twitter.gif" width="18" height="18" alt="Follow Us on Twitter"><br />Follow Us</a></li>
+      <li><a href="#twitter" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false"><img src="images/twitter.gif" width="18" height="18" alt="Visit our Twitter Feed"><br />Twitter Feed</a></li>
+         </ul> 
+    </div>  
+    <div data-role="content" data-theme="d" > 
+        <p>Travel Adventures has been helping people live out their dreams since 1954. We are a family owned business and look forward to&nbsp;planning your next vacation.</p>
+        <p>We can customize any travel plans based on your specific needs. Contact us to make your dream vacation a reality!</p>
+        <p> <strong>Mailing Address:</strong><br />
+        Travel Adventures<br />
+        555 Center Court<br />
+        Minneapolis, MN 63421<br />
+        </p>
+        
+        <p><strong>Phone:</strong><br />
+        800-555-TOUR</p>
+        
+        <p><strong>Email:</strong><br />
+        betours@traveladventuremax.com</p>
+    </div>
+    <!--************** about us content area end ****************-->
+ 
+    <!--************** about us footer start ****************-->
+  <div data-role="footer" data-theme="b" data-position="fixed">
+      <div data-role="navbar" data-theme="e" >
+            <ul> 
+                <li><a href="#home" class="ui-btn-active" data-icon="home">主页</a></li>
+                <li><a href="#tours" data-icon="grid">景点介绍</a></li>
+                <li><a href="#hotel" data-icon="info">附近酒店</a></li> 
+                <li><a href="comment.html#comment" data-icon="star" rel="external">近期评论</a></li>
+            </ul> 
+      </div>
+        <p class="copyright">&copy; 2013 ITravel System &nbsp;&nbsp;800-555-TOUR</p>
+    </div>
+    <!--************** about us footer end ****************-->
+  </div>
+  <!--************** about us page ends here ****************-->
+
+</body>
+
+<script type="text/javascript">
+    //创建和初始化地图函数：
+    function initMap(){
+        var x=103.2910;  //设置经度
+        var y=29.3600;	//设置纬度
+        var point = new BMap.Point(x,y);//定义一个中心点坐标
+        window.point=point;
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        //addMapControl();
+    }
+    
+    //创建地图函数：
+    function createMap(){
+        var map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
+        map.centerAndZoom(point,16);//设定地图的中心点和坐标并将地图显示在地图容器中
+        var local = new BMap.LocalSearch(map, {
+            renderOptions:{
+              map: map
+            }
+        });
+        local.setPageCapacity(20);
+        local.search("酒店|宾馆");//搜索附近的酒店或者宾馆
+        window.map = map;//将map变量存储在全局
+    }
+  
+    //地图事件设置函数：
+    function setMapEvent(){
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+    
+    //地图控件添加函数：
+    function addMapControl(){
+        //向地图中添加缩放控件
+      var ctrl_nav = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
+      map.addControl(ctrl_nav);
+            //向地图中添加缩略图控件
+      var ctrl_ove = new BMap.OverviewMapControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,isOpen:1});
+      map.addControl(ctrl_ove);
+            //向地图中添加比例尺控件
+      var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
+      map.addControl(ctrl_sca);
+    }
+
+    initMap();//创建和初始化地图
+</script>
+
+</html>

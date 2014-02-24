@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Travel Adventure Photo Gallery</title>
+	<meta charset="UTF-8">
+	<meta name="author" content="Ste Brennan - Code Computerlove - http://www.codecomputerlove.com/" />
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+
+	<!--The link and script tags below are in this particular order in order for the photo gallery to work properly.
+    Please use this entire code area in this same order on your photogallery.html page.-->
+
+	<!--Below are the jquery mobile separate theme & structure css files
+    These files are also on the index.html page-->
+	<link href="css/jquery.mobile-1.3.2.min.css" rel="stylesheet" type="text/css"/>
+
+	<!--These are the photo gallery specific css files needed by photoswipe-->
+	<link href="photoswipe/code-3.0.4/examples/jquery-mobile.css" type="text/css" rel="stylesheet" />
+	<link href="photoswipe/code-3.0.4/photoswipe.css" type="text/css" rel="stylesheet" />
+
+	<!--The script tag below is needed by photoswipe in order for the photo gallery to work correctly-->
+	<script type="text/javascript" src="photoswipe/lib/klass.min.js"></script>
+
+	<!--The 2 script tags below are needed for jQuery mobile to work properly-->
+	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+	<script src="js/jquery.mobile-1.3.2.min.js" type="text/javascript"></script>
+
+	<!--The script tag below is the photoswipe specific version of jQuery that is needed for the photo gallery to work correctly-->
+	<script type="text/javascript" src="photoswipe/code-3.0.4/code.photoswipe.jquery-3.0.4.min.js"></script>
+
+	<!--The script tag below is a jQuery function that allows the slideshow to work properly-->
+	<script type="text/javascript">		
+		/*
+		 * IMPORTANT!!!
+		 * REMEMBER TO ADD  rel="external"  to your anchor tags. 
+		 * If you don't this will mess with how jQuery Mobile works
+		 */
+		
+		(function(window, $, PhotoSwipe){			
+			$(document).ready(function(){				
+				$('div.gallery-page')
+					.bind('pageshow', function(e){						
+						var 
+							currentPage = $(e.target),
+							options = {},
+							photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options,  currentPage.attr('id'));							
+						return true;						
+					})					
+					.bind('pagehide', function(e){						
+						var 
+							currentPage = $(e.target),
+							photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
+
+						if (typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null) {
+							PhotoSwipe.detatch(photoSwipeInstance);
+						}						
+						return true;						
+					});				
+			});		
+		}(window, window.jQuery, window.Code.PhotoSwipe));		
+	</script>
+
+	<!--This stylesheet code is for the css styles I have added to the website-->
+	<link href="my-styles.css" rel="stylesheet" type="text/css"></head>
+<body>
+
+	<div data-role="page" id="Home" data-theme="e" data-add-back-btn="true">
+
+		<div data-role="header" data-theme="b">
+			<a href="index.html" data-rel="back" data-icon="arrow-l">返回</a>
+			<h1>我们的图片库</h1>
+		</div>
+
+		<div data-role="content" >
+			<p>以星级选择你要浏览的图片</p>
+			<ul data-role="listview" data-inset="true">
+				<li>
+					<a href="#Gallery1">五星级</a>
+				</li>
+				<li>
+					<a href="#Gallery2">四星级</a>
+				</li>
+				<li>
+					<a href="#Gallery3">三星级</a>
+				</li>
+				<li>
+					<a href="#Gallery4">二星级</a>
+				</li>
+				<li>
+					<a href="#Gallery5">一星级</a>
+				</li>
+			</ul>
+
+		</div>
+
+		<div data-role="footer" data-theme="b" data-position="fixed">
+  			<div data-role="navbar" data-theme="e" >
+	            <ul> 
+	                <li><a href="index.html#home" class="ui-btn-active" data-icon="home" rel="external">主页</a></li>
+	                <li><a href="index.html#tours" data-icon="grid" rel="external">景点介绍</a></li>
+	                <li><a href="index.html#hotel" data-icon="info" rel="external">附近酒店</a></li> 
+	                <li><a href="comment.html#comment" data-icon="star" rel="external">近期评论</a></li>
+	            </ul> 
+      		</div>
+      		<p style="text-align:center">&copy; 2013 ITravel System &nbsp;&nbsp;800-555-TOUR</p>
+  		</div>
+
+	</div>
+
+	<div data-role="page" data-add-back-btn="true" id="Gallery1" class="gallery-page" data-theme="e">
+		<div data-role="header" data-theme="b">
+			<h1>五星级</h1>
+		</div>
+
+		<div data-role="content">
+
+			<ul class="gallery">
+				<li>
+					<a href="photoswipe/gallery/bridge-statue-big.jpg" rel="external">
+						<img src="photoswipe/gallery/bridge-statue-150.jpg" alt="Bronze Statue in Budapest" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/castle-big.jpg" rel="external">
+						<img src="photoswipe/gallery/castle-150.jpg" alt="Reigersburg Castle Austria" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/budapest-big.jpg" rel="external">
+						<img src="photoswipe/gallery/budapest-150.jpg" alt="Budapest Hungary" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/austria-big.jpg" rel="external">
+						<img src="photoswipe/gallery/austria-150.jpg" alt="An Austrian Schloss" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/austrian-town-big.jpg" rel="external">
+						<img src="photoswipe/gallery/austrian-town-150.jpg" alt="The Beauty of Austria" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/graz-mur-big.jpg" rel="external">
+						<img src="photoswipe/gallery/graz-mur-150.jpg" alt="The Mur River" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/european-bldg-big.jpg" rel="external">
+						<img src="photoswipe/gallery/european-bldg-150.jpg" alt="Architectural Grandeur" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/coffee-house-big.jpg" rel="external">
+						<img src="photoswipe/gallery/coffee-house-150.jpg" alt="An Austrian Coffee House" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/prague-big.jpg" rel="external">
+						<img src="photoswipe/gallery/prague-150.jpg" alt="The City of Prague" />
+					</a>
+				</li>
+			</ul>
+
+		</div>
+
+		<div data-role="footer" data-theme="b" data-position="fixed">
+  			<div data-role="navbar" data-theme="e" >
+	            <ul> 
+	                <li><a href="index.html#home" class="ui-btn-active" data-icon="home" rel="external">主页</a></li>
+	                <li><a href="index.html#tours" data-icon="grid" rel="external">景点介绍</a></li>
+	                <li><a href="index.html#hotel" data-icon="info" rel="external">附近酒店</a></li> 
+	                <li><a href="comment.html#comment" data-icon="star" rel="external">近期评论</a></li>
+	            </ul> 
+      		</div>
+      		<p style="text-align:center">&copy; 2013 ITravel System &nbsp;&nbsp;800-555-TOUR</p>
+  		</div>
+	</div>
+
+
+	<div data-role="page" data-add-back-btn="true" id="Gallery2" class="gallery-page" data-theme="e">
+
+		<div data-role="header" data-theme="b">
+			<h1>四星级</h1>
+		</div>
+
+		<div data-role="content">
+			<ul class="gallery">
+				<li>
+					<a href="photoswipe/gallery/bridge-statue-big.jpg" rel="external">
+						<img src="photoswipe/gallery/bridge-statue-150.jpg" alt="Bronze Statue in Budapest" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/castle-big.jpg" rel="external">
+						<img src="photoswipe/gallery/castle-150.jpg" alt="Reigersburg Castle Austria" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/budapest-big.jpg" rel="external">
+						<img src="photoswipe/gallery/budapest-150.jpg" alt="Budapest Hungary" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/austria-big.jpg" rel="external">
+						<img src="photoswipe/gallery/austria-150.jpg" alt="An Austrian Schloss" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/austrian-town-big.jpg" rel="external">
+						<img src="photoswipe/gallery/austrian-town-150.jpg" alt="The Beauty of Austria" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/graz-mur-big.jpg" rel="external">
+						<img src="photoswipe/gallery/graz-mur-150.jpg" alt="The Mur River" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/european-bldg-big.jpg" rel="external">
+						<img src="photoswipe/gallery/european-bldg-150.jpg" alt="Architectural Grandeur" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/coffee-house-big.jpg" rel="external">
+						<img src="photoswipe/gallery/coffee-house-150.jpg" alt="An Austrian Coffee House" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/prague-big.jpg" rel="external">
+						<img src="photoswipe/gallery/prague-150.jpg" alt="The City of Prague" />
+					</a>
+				</li>
+			</ul>
+
+		</div>
+
+		<div data-role="footer" data-theme="b" data-position="fixed">
+  			<div data-role="navbar" data-theme="e" >
+	            <ul> 
+	                <li><a href="index.html#home" class="ui-btn-active" data-icon="home" rel="external">主页</a></li>
+	                <li><a href="index.html#tours" data-icon="grid" rel="external">景点介绍</a></li>
+	                <li><a href="index.html#hotel" data-icon="info" rel="external">附近酒店</a></li> 
+	                <li><a href="comment.html#comment" data-icon="star" rel="external">近期评论</a></li>
+	            </ul> 
+      		</div>
+      		<p style="text-align:center">&copy; 2013 ITravel System &nbsp;&nbsp;800-555-TOUR</p>
+  		</div>
+
+	</div>
+
+	<div data-role="page" data-add-back-btn="true" id="Gallery3" class="gallery-page" data-theme="e">
+
+		<div data-role="header" data-theme="b">
+			<h1>三星级</h1>
+		</div>
+
+		<div data-role="content">
+			<ul class="gallery">
+
+				<li>
+					<a href="photoswipe/gallery/bridge-statue-big.jpg" rel="external">
+						<img src="photoswipe/gallery/bridge-statue-150.jpg" alt="Bronze Statue in Budapest" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/castle-big.jpg" rel="external">
+						<img src="photoswipe/gallery/castle-150.jpg" alt="Reigersburg Castle Austria" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/budapest-big.jpg" rel="external">
+						<img src="photoswipe/gallery/budapest-150.jpg" alt="Budapest Hungary" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/austria-big.jpg" rel="external">
+						<img src="photoswipe/gallery/austria-150.jpg" alt="An Austrian Schloss" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/austrian-town-big.jpg" rel="external">
+						<img src="photoswipe/gallery/austrian-town-150.jpg" alt="The Beauty of Austria" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/graz-mur-big.jpg" rel="external">
+						<img src="photoswipe/gallery/graz-mur-150.jpg" alt="The Mur River" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/european-bldg-big.jpg" rel="external">
+						<img src="photoswipe/gallery/european-bldg-150.jpg" alt="Architectural Grandeur" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/coffee-house-big.jpg" rel="external">
+						<img src="photoswipe/gallery/coffee-house-150.jpg" alt="An Austrian Coffee House" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/prague-big.jpg" rel="external">
+						<img src="photoswipe/gallery/prague-150.jpg" alt="The City of Prague" />
+					</a>
+				</li>
+			</ul>
+
+		</div>
+
+		<div data-role="footer" data-theme="b" data-position="fixed">
+  			<div data-role="navbar" data-theme="e" >
+	            <ul> 
+	                <li><a href="index.html#home" class="ui-btn-active" data-icon="home" rel="external">主页</a></li>
+	                <li><a href="index.html#tours" data-icon="grid" rel="external">景点介绍</a></li>
+	                <li><a href="index.html#hotel" data-icon="info" rel="external">附近酒店</a></li> 
+	                <li><a href="comment.html#comment" data-icon="star" rel="external">近期评论</a></li>
+	            </ul> 
+      		</div>
+      		<p style="text-align:center">&copy; 2013 ITravel System &nbsp;&nbsp;800-555-TOUR</p>
+  		</div>
+
+	</div>
+
+	<div data-role="page" data-add-back-btn="true" id="Gallery4" class="gallery-page" data-theme="e">
+
+		<div data-role="header" data-theme="b">
+			<h1>二星级</h1>
+		</div>
+
+		<div data-role="content">
+			<ul class="gallery">
+
+				<li>
+					<a href="photoswipe/gallery/bridge-statue-big.jpg" rel="external">
+						<img src="photoswipe/gallery/bridge-statue-150.jpg" alt="Bronze Statue in Budapest" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/castle-big.jpg" rel="external">
+						<img src="photoswipe/gallery/castle-150.jpg" alt="Reigersburg Castle Austria" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/budapest-big.jpg" rel="external">
+						<img src="photoswipe/gallery/budapest-150.jpg" alt="Budapest Hungary" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/austria-big.jpg" rel="external">
+						<img src="photoswipe/gallery/austria-150.jpg" alt="An Austrian Schloss" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/austrian-town-big.jpg" rel="external">
+						<img src="photoswipe/gallery/austrian-town-150.jpg" alt="The Beauty of Austria" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/graz-mur-big.jpg" rel="external">
+						<img src="photoswipe/gallery/graz-mur-150.jpg" alt="The Mur River" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/european-bldg-big.jpg" rel="external">
+						<img src="photoswipe/gallery/european-bldg-150.jpg" alt="Architectural Grandeur" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/coffee-house-big.jpg" rel="external">
+						<img src="photoswipe/gallery/coffee-house-150.jpg" alt="An Austrian Coffee House" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/prague-big.jpg" rel="external">
+						<img src="photoswipe/gallery/prague-150.jpg" alt="The City of Prague" />
+					</a>
+				</li>
+			</ul>
+		</div>
+
+		<div data-role="footer" data-theme="b" data-position="fixed">
+  			<div data-role="navbar" data-theme="e" >
+	            <ul> 
+	                <li><a href="index.html#home" class="ui-btn-active" data-icon="home" rel="external">主页</a></li>
+	                <li><a href="index.html#tours" data-icon="grid" rel="external">景点介绍</a></li>
+	                <li><a href="index.html#hotel" data-icon="info" rel="external">附近酒店</a></li> 
+	                <li><a href="comment.html#comment" data-icon="star" rel="external">近期评论</a></li>
+	            </ul> 
+      		</div>
+      		<p style="text-align:center">&copy; 2013 ITravel System &nbsp;&nbsp;800-555-TOUR</p>
+  		</div>
+
+	</div>
+
+	<div data-role="page" data-add-back-btn="true" id="Gallery5" class="gallery-page" data-theme="e">
+
+		<div data-role="header" data-theme="b">
+			<h1>一星级</h1>
+		</div>
+
+		<div data-role="content">
+			<ul class="gallery">
+
+				<li>
+					<a href="photoswipe/gallery/bridge-statue-big.jpg" rel="external">
+						<img src="photoswipe/gallery/bridge-statue-150.jpg" alt="Bronze Statue in Budapest" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/castle-big.jpg" rel="external">
+						<img src="photoswipe/gallery/castle-150.jpg" alt="Reigersburg Castle Austria" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/budapest-big.jpg" rel="external">
+						<img src="photoswipe/gallery/budapest-150.jpg" alt="Budapest Hungary" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/austria-big.jpg" rel="external">
+						<img src="photoswipe/gallery/austria-150.jpg" alt="An Austrian Schloss" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/austrian-town-big.jpg" rel="external">
+						<img src="photoswipe/gallery/austrian-town-150.jpg" alt="The Beauty of Austria" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/graz-mur-big.jpg" rel="external">
+						<img src="photoswipe/gallery/graz-mur-150.jpg" alt="The Mur River" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/european-bldg-big.jpg" rel="external">
+						<img src="photoswipe/gallery/european-bldg-150.jpg" alt="Architectural Grandeur" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/coffee-house-big.jpg" rel="external">
+						<img src="photoswipe/gallery/coffee-house-150.jpg" alt="An Austrian Coffee House" />
+					</a>
+				</li>
+				<li>
+					<a href="photoswipe/gallery/prague-big.jpg" rel="external">
+						<img src="photoswipe/gallery/prague-150.jpg" alt="The City of Prague" />
+					</a>
+				</li>
+			</ul>
+		</div>
+
+		<div data-role="footer" data-theme="b" data-position="fixed">
+  			<div data-role="navbar" data-theme="e" >
+	            <ul> 
+	                <li><a href="index.html#home" class="ui-btn-active" data-icon="home" rel="external">主页</a></li>
+	                <li><a href="index.html#tours" data-icon="grid" rel="external">景点介绍</a></li>
+	                <li><a href="index.html#hotel" data-icon="info" rel="external">附近酒店</a></li> 
+	                <li><a href="comment.html#comment" data-icon="star" rel="external">近期评论</a></li>
+	            </ul> 
+      		</div>
+      		<p style="text-align:center">&copy; 2013 ITravel System &nbsp;&nbsp;800-555-TOUR</p>
+  		</div>
+
+	</div>
+</body>
+</html>
